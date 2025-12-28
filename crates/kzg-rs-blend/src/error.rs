@@ -16,4 +16,3 @@ impl fmt::Display for RaikoError {
 impl std::error::Error for RaikoError {}
 
 pub type RaikoResult<T> = Result<T, RaikoError>;
-

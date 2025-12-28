@@ -1,8 +1,8 @@
-// 将guest中的逻辑提取为一个共享函数，可以在测试和guest中使用
+// Extract the verification logic from guest as a shared function that can be used in tests and guest
 use kzg_rs_blend::verify_blob_kzg_proof;
 use kzg_rs_blend::KzgCommitmentBytes;
 
-/// 验证blob KZG proof - 与guest/src/lib.rs中的逻辑完全一致
+/// Verify blob KZG proof - logic is identical to guest/src/lib.rs
 pub fn verify_kzg_proof(
     blob: &[u8],
     commitment: &KzgCommitmentBytes,
@@ -26,15 +26,14 @@ mod tests {
 
     #[test]
     fn test_verify_kzg_proof() {
-        // 使用与guest相同的测试数据
+        // Use the same test data as guest
         let blob = vec![0u8; 131072];
         let commitment: KzgCommitmentBytes = [0u8; 48];
         let proof: KzgCommitmentBytes = [0u8; 48];
 
-        // 这里会失败，因为使用的是零值，但逻辑与guest完全一致
+        // This will fail because we're using zero values, but the logic is identical to guest
         let result = verify_kzg_proof(&blob, &commitment, &proof);
-        // 注意：这个测试在实际情况下需要使用有效的commitment和proof才能通过
+        // Note: This test requires valid commitment and proof to pass in real scenarios
         println!("Verification result: {}", result);
     }
 }
-

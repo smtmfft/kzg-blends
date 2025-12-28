@@ -1,15 +1,15 @@
-// 独立的bin用于在host端测试guest中的KZG验证逻辑，与guest中的逻辑完全一致
-// 用法: cargo run --bin verify_guest
+// Standalone bin for testing KZG verification logic from guest on the host side, with logic identical to guest
+// Usage: cargo run --bin verify_guest
 use kzg_rs_blend::verify_blob_kzg_proof;
 use kzg_rs_blend::KzgCommitmentBytes;
 
 fn main() {
-    // 示例数据 - 与guest/src/lib.rs中的逻辑完全一致
+    // Example data - logic is identical to guest/src/lib.rs
     let blob = vec![0u8; 131072]; // EIP-4844 blob size
     let commitment: KzgCommitmentBytes = [0u8; 48]; // This should be the actual commitment
     let proof: KzgCommitmentBytes = [0u8; 48]; // This should be the actual proof
 
-    // 验证逻辑 - 与guest/src/lib.rs中的逻辑完全一致
+    // Verification logic - identical to guest/src/lib.rs
     let result = match verify_blob_kzg_proof(&blob, &commitment, &proof) {
         Ok(_) => {
             println!("✓ KZG proof verification successful!");
@@ -25,4 +25,3 @@ fn main() {
         std::process::exit(1);
     }
 }
-
