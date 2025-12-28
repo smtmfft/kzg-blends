@@ -1,39 +1,53 @@
+use kzg_rs_blend::KzgCommitmentBytes;
 use sp1_sdk::{utils, ProverClient, SP1Stdin};
 
-const ELF: &[u8] = include_bytes!("../../guest/target/riscv32im-succinct-zkvm-elf/release/guest");
+const ELF: &[u8] =
+    include_bytes!("../../guest/target/elf-compilation/riscv32im-succinct-zkvm-elf/release/guest");
+
+// Load blob and commitment from data directory
+const BLOB: &[u8] = include_bytes!("../../data/blob_13326465_0.bin");
+const COMMITMENT: &[u8] = include_bytes!("../../data/blob_13326465_0.cmt");
 
 fn main() {
     // Setup logger
     utils::setup_logger();
 
+    // Load blob and commitment from embedded data
+    let blob = BLOB;
+    let commitment: KzgCommitmentBytes =
+        COMMITMENT.try_into().expect("Commitment must be 48 bytes");
+
+    // Compute KZG proof locally using kzg_rs_blend
+    let kzg_proof =
+        kzg_rs_blend::blob_to_proof(blob, &commitment).expect("Failed to compute proof");
+
+    println!("Loaded blob: {} bytes", blob.len());
+    println!("Loaded commitment: 0x{}", hex::encode(commitment));
+    println!("Computed KZG proof: 0x{}", hex::encode(kzg_proof));
+
     // Create stdin with test data
     let mut stdin = SP1Stdin::new();
 
-    // Example blob (131072 bytes for EIP-4844)
-    let blob = vec![0u8; 131072];
-    let commitment: [u8; 48] = [0u8; 48]; // This should be the actual commitment
-    let proof: [u8; 48] = [0u8; 48]; // This should be the actual proof
-
     // Write inputs to stdin
-    stdin.write(&blob);
+    stdin.write(&blob.to_vec());
     stdin.write(&commitment.to_vec());
-    stdin.write(&proof.to_vec());
+    stdin.write(&kzg_proof.to_vec());
 
     // Initialize SP1 prover client
     let client = ProverClient::from_env();
 
     let (pk, vk) = client.setup(ELF);
-    // Execute the guest program and generate proof
-    let proof = client
+    // Execute the guest program and generate SP1 proof
+    let sp1_proof = client
         .prove(&pk, &stdin)
         .groth16()
         .run()
         .expect("Failed to execute guest program");
 
-    // Verify the proof
+    // Verify the SP1 proof
     client
-        .verify(&proof, &vk)
-        .expect("Proof verification failed");
+        .verify(&sp1_proof, &vk)
+        .expect("SP1 proof verification failed");
 
     println!("✓ SP1 proof verified successfully!");
 }
