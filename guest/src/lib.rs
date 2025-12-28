@@ -1,16 +1,20 @@
-use sp1_zkvm::prelude::*;
-use kzg_rs_blend::verify_blob_kzg_proof;
-use kzg_rs_blend::KzgCommitmentBytes;
+#![no_main]
+sp1_zkvm::entrypoint!(main);
 
-#[sp1_zkvm::entrypoint]
+use kzg_rs_blend::verify_blob_kzg_proof;
+use sp1_zkvm::io::{commit, read};
+
 pub fn main() {
     // Read inputs from the host
-    let blob = SP1Stdin::read::<Vec<u8>>();
-    let commitment = SP1Stdin::read::<KzgCommitmentBytes>();
-    let proof = SP1Stdin::read::<KzgCommitmentBytes>();
+    let blob = read::<Vec<u8>>();
+    let commitment = read::<Vec<u8>>();
+    let proof = read::<Vec<u8>>();
 
-    // Verify the blob KZG proof - 逻辑与host中的verify_test完全一致
-    let result = match verify_blob_kzg_proof(&blob, &commitment, &proof) {
+    let result = match verify_blob_kzg_proof(
+        &blob,
+        &commitment.try_into().unwrap(),
+        &proof.try_into().unwrap(),
+    ) {
         Ok(_) => {
             // Verification successful
             true
@@ -23,6 +27,5 @@ pub fn main() {
     };
 
     // Write the result back to the host
-    SP1Stdout::write(&result);
+    commit(&result);
 }
-
