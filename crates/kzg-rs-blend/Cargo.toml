@@ -1,0 +1,11 @@
+[package]
+name = "kzg-rs-blend"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+kzg = { package = "rust-kzg-zkcrypto", git = "https://github.com/smtmfft/rust-kzg.git", branch="raiko2-main", default-features = false, features=["rand", "bincode"] }
+kzg_traits = { package = "kzg", git = "https://github.com/smtmfft/rust-kzg.git",  branch="raiko2-main", default-features = false }
+
+alloy-primitives = { version = "1.5.0", default-features = false }
+bincode = "1.3"

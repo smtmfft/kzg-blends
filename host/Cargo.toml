@@ -1,0 +1,19 @@
+[package]
+name = "host"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "verify_guest"
+path = "src/bin/verify_guest.rs"
+
+[dependencies]
+sp1-sdk = { workspace = true }
+kzg-rs-blend = { path = "../crates/kzg-rs-blend", default-features = false }
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+strip = true
+

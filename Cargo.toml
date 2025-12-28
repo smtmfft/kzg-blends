@@ -1,0 +1,7 @@
+[workspace]
+members = ["crates/kzg-rs-blend", "host"]
+resolver = "2"
+
+[workspace.dependencies]
+sp1-zkvm = "5.2.4"
+sp1-sdk = "5.2.4"
