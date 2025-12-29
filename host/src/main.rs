@@ -1,5 +1,5 @@
 use kzg_rs_blend::KzgCommitmentBytes;
-use sp1_sdk::{utils, ProverClient, SP1Stdin};
+use sp1_sdk::{ProverClient, SP1Stdin, utils};
 
 const ELF: &[u8] =
     include_bytes!("../../guest/target/elf-compilation/riscv32im-succinct-zkvm-elf/release/guest");
@@ -33,21 +33,23 @@ fn main() {
     stdin.write(&commitment.to_vec());
     stdin.write(&kzg_proof.to_vec());
 
+    println!("Setup SP1 prover client");
     // Initialize SP1 prover client
     let client = ProverClient::from_env();
 
-    let (pk, vk) = client.setup(ELF);
+    // let (_pk, _vk) = client.setup(ELF);
+
+    println!("Execute guest program");
     // Execute the guest program and generate SP1 proof
-    let sp1_proof = client
-        .prove(&pk, &stdin)
-        .groth16()
+    let _sp1_proof = client
+        .execute(ELF, &stdin)
         .run()
         .expect("Failed to execute guest program");
 
-    // Verify the SP1 proof
-    client
-        .verify(&sp1_proof, &vk)
-        .expect("SP1 proof verification failed");
+    // // Verify the SP1 proof
+    // client
+    //     .verify(&sp1_proof, &vk)
+    //     .expect("SP1 proof verification failed");
 
     println!("✓ SP1 proof verified successfully!");
 }

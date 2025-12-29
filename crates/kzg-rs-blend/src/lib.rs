@@ -24,18 +24,24 @@ static DEFAULT_KZG_SETTINGS_BIN: &[u8] = include_bytes!("../kzg_settings.bin");
 
 /// Get or initialize the KZG settings.
 pub(crate) fn get_kzg_settings() -> RaikoResult<&'static KZGSettings> {
-    match KZG_SETTINGS.get_or_init(init_kzg_settings) {
+    println!("cycle-tracker-start: get_kzg_settings");
+    let res = match KZG_SETTINGS.get_or_init(init_kzg_settings) {
         Ok(settings) => Ok(settings),
         Err(e) => Err(RaikoError::InvalidBlobOption(format!(
             "KZG settings initialization failed: {e}"
         ))),
-    }
+    };
+    println!("cycle-tracker-end: get_kzg_settings");
+    res
 }
 
 /// Initialize KZG settings from the embedded trusted setup bytes.
 fn init_kzg_settings() -> Result<KZGSettings, String> {
-    bincode::deserialize(DEFAULT_KZG_SETTINGS_BIN)
-        .map_err(|e| format!("bincode deserialize KZGSettings failed: {e}"))
+    println!("cycle-tracker-start: init_kzg_settings");
+    let res = bincode::deserialize(DEFAULT_KZG_SETTINGS_BIN)
+        .map_err(|e| format!("bincode deserialize KZGSettings failed: {e}"));
+    println!("cycle-tracker-end: init_kzg_settings");
+    res
 }
 
 pub type KzgField = [u8; 32];
@@ -132,6 +138,7 @@ pub(crate) fn verify_blob_kzg_proof_with_settings(
     proof: &KzgCommitmentBytes,
     kzg_settings: &KZGSettings,
 ) -> RaikoResult<()> {
+    println!("cycle-tracker-start: verify_blob_kzg_proof_with_settings");
     let blob_fields = bytes_to_blob(blob)
         .map_err(|e| RaikoError::InvalidBlobOption(format!("Failed to convert blob: {}", e)))?;
 
@@ -148,6 +155,7 @@ pub(crate) fn verify_blob_kzg_proof_with_settings(
             "KZG proof verification failed".to_string(),
         ));
     }
+    println!("cycle-tracker-end: verify_blob_kzg_proof_with_settings");
     Ok(())
 }
 
