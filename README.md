@@ -29,7 +29,22 @@ kzg-rs-blend/
 
 ## Usage
 
-### 1. Test guest verification logic on host side (Recommended first step)
+### 1. Build guest program
+
+```bash
+cd guest
+cargo prove build
+```
+
+### 2. Build and run/profiling host program (mock execute ZK proof)
+
+```bash
+cd host
+#cargo build --release
+RUST_LOG=info SP1_PROVER=mock cargo run --bin host --release
+```
+
+### 3. (Optional) Test guest verification logic on host side
 
 ```bash
 cd host
@@ -41,21 +56,6 @@ cargo test
 ```
 
 This allows you to verify the KZG verification logic on the host side first before running in guest.
-
-### 2. Build guest program
-
-```bash
-cd guest
-cargo build --release --target riscv32im-succinct-zkvm-elf
-```
-
-### 3. Build and run host program (execute ZK proof)
-
-```bash
-cd host
-cargo build --release
-cargo run --release
-```
 
 ### 4. Workspace usage
 
