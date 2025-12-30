@@ -1,20 +1,15 @@
 [package]
-name = "host"
+name = "risc0-guest"
 version = "0.1.0"
 edition = "2021"
 
-[[bin]]
-name = "verify_guest"
-path = "src/bin/verify_guest.rs"
-
 [dependencies]
-sp1-sdk = { workspace = true }
+risc0-zkvm = { version = "1.2", default-features = false, features = ["std"] }
 kzg-rs-blend = { path = "../crates/kzg-rs-blend" }
-hex = "0.4"
+
+[workspace]
 
 [profile.release]
 opt-level = 3
 lto = true
-codegen-units = 1
-strip = true
 

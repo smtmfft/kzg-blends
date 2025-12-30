@@ -5,7 +5,7 @@ edition = "2021"
 
 [dependencies]
 sp1-zkvm = { version = "5.2.4", features = ["verify", "embedded"] }
-kzg-rs-blend = { path = "../crates/kzg-rs-blend", default-features = false }
+kzg-rs-blend = { path = "../crates/kzg-rs-blend" }
 
 [profile.release]
 opt-level = 3
