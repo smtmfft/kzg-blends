@@ -29,4 +29,3 @@ pub fn main() {
     env::commit(&result);
     println!("cycle-tracker-end: main");
 }
-

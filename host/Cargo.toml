@@ -7,8 +7,18 @@ edition = "2021"
 name = "verify_guest"
 path = "src/bin/verify_guest.rs"
 
+[[bin]]
+name = "sp1_host"
+path = "src/bin/sp1_host.rs"
+
+[[bin]]
+name = "risc0_host"
+path = "src/bin/risc0_host.rs"
+
 [dependencies]
 sp1-sdk = { workspace = true }
+risc0-zkvm = "3.0.4"
+risc0-build = "3.0.4"
 kzg-rs-blend = { path = "../crates/kzg-rs-blend" }
 hex = "0.4"
 

@@ -6,7 +6,7 @@ edition = "2024"
 [dependencies]
 kzg = { package = "rust-kzg-zkcrypto", git = "https://github.com/smtmfft/rust-kzg.git", branch="raiko2-main", default-features = false, features=["rand", "bincode"] }
 kzg_traits = { package = "kzg", git = "https://github.com/smtmfft/rust-kzg.git",  branch="raiko2-main", default-features = false }
-kzg-rs = "0.2"
+kzg-rs = "0.2.7"
 
 alloy-primitives = { version = "1.5.0", default-features = false }
 bincode = "1.3"

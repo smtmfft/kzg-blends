@@ -2,11 +2,11 @@ use kzg_rs_blend::KzgCommitmentBytes;
 use sp1_sdk::{ProverClient, SP1Stdin, utils};
 
 const ELF: &[u8] =
-    include_bytes!("../../guest/target/elf-compilation/riscv32im-succinct-zkvm-elf/release/guest");
+    include_bytes!("../../../guest/target/elf-compilation/riscv32im-succinct-zkvm-elf/release/guest");
 
 // Load blob and commitment from data directory
-const BLOB: &[u8] = include_bytes!("../../data/blob_13326465_0.bin");
-const COMMITMENT: &[u8] = include_bytes!("../../data/blob_13326465_0.cmt");
+const BLOB: &[u8] = include_bytes!("../../../data/blob_13326465_0.bin");
+const COMMITMENT: &[u8] = include_bytes!("../../../data/blob_13326465_0.cmt");
 
 fn main() {
     // Setup logger
@@ -53,3 +53,4 @@ fn main() {
 
     println!("✓ SP1 proof verified successfully!");
 }
+
