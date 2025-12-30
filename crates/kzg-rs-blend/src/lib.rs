@@ -279,7 +279,7 @@ mod test {
         use std::fs;
 
         // Read blob from file
-        let blob_file = concat!(env!("CARGO_MANIFEST_DIR"), "/blob_13326465_0.bin");
+        let blob_file = concat!(env!("CARGO_MANIFEST_DIR"), "/../../data/blob_13326465_0.bin");
         let blob_bytes = fs::read(blob_file).expect("Failed to read blob file");
         println!("Read blob: {} bytes", blob_bytes.len());
 
